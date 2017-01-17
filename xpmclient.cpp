@@ -805,6 +805,11 @@ bool XPMClient::Initialize(Configuration* cfg, bool benchmarkOnly) {
     platformType = ptNVidia;    
     clKernelLSize = 1024;
     clKernelLSizeLog2 = 10;
+  } else if (strcmp(platformId, "intel") == 0) {
+    platformName = "Intel(R) OpenCL";
+    platformType = ptNVidia;    
+    clKernelLSize = 256;
+    clKernelLSizeLog2 = 8;
   }
   
   cl_platform_id platforms[10];
