@@ -260,7 +260,8 @@ public:
 private:
   enum PlatformType {
     ptAMD = 0,
-    ptNVidia
+    ptNVidia,
+    ptIntel
   };
   
   PlatformType platformType;
