@@ -46,8 +46,10 @@ bool cudaCompileKernel(const char *kernelName,
     NVRTC_SAFE_CALL(nvrtcGetProgramLogSize(prog, &logSize));
     char *log = new char[logSize];
     NVRTC_SAFE_CALL(nvrtcGetProgramLog(prog, log));
+    LOG_F(INFO, log);
     delete[] log;
     if (compileResult != NVRTC_SUCCESS) {
+      LOG_F(ERROR, "error compiling cuda sources");
       return false;
     }
     
@@ -78,6 +80,7 @@ bool cudaCompileKernel(const char *kernelName,
   
   std::ifstream bfile(kernelName, std::ifstream::binary);
   if(!bfile) {
+    LOG_F(ERROR, "failed to open %s", kernelName);
     return false;
   }  
   
