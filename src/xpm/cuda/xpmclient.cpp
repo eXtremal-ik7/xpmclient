@@ -950,11 +950,15 @@ bool XPMClient::Initialize(Configuration* cfg, bool benchmarkOnly, unsigned adju
 		sprintf(kernelname, "kernelxpm_gpu%u.ptx", gpus[i].index);
 		sprintf(ccoption, "--gpu-architecture=compute_%i%i", gpus[i].majorComputeCapability, gpus[i].minorComputeCapability);
     const char *options[] = { ccoption, arguments.c_str() };
+        unsigned noptions = 1;
+        if (arguments.size()) {
+            ++ noptions;
+        }
 		CUDA_SAFE_CALL(cuCtxSetCurrent(gpus[i].context));
     if (!cudaCompileKernel(kernelname,
 				{ "xpm/cuda/config.cu", "xpm/cuda/procs.cu", "xpm/cuda/fermat.cu", "xpm/cuda/sieve.cu", "xpm/cuda/sha256.cu", "xpm/cuda/benchmarks.cu"},
 				options,
-        sizeof(options)/sizeof(const char*),
+        noptions,
 				&modules[i],
         gpus[i].majorComputeCapability,
         gpus[i].minorComputeCapability,
