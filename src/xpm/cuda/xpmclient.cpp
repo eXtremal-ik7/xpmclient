@@ -935,7 +935,11 @@ bool XPMClient::Initialize(Configuration* cfg, bool benchmarkOnly, unsigned adju
 			CUDA_SAFE_CALL(cuDeviceGet(&info.device, i));
 			CUDA_SAFE_CALL(cuDeviceGetAttribute(&info.majorComputeCapability, CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MAJOR, info.device));
 			CUDA_SAFE_CALL(cuDeviceGetAttribute(&info.minorComputeCapability, CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MINOR, info.device));
+#if CUDA_VERSION >= 13000
+			CUDA_SAFE_CALL(cuCtxCreate(&info.context, nullptr, CU_CTX_SCHED_AUTO, info.device));
+#else
 			CUDA_SAFE_CALL(cuCtxCreate(&info.context, CU_CTX_SCHED_AUTO, info.device));
+#endif
 			CUDA_SAFE_CALL(cuDeviceGetName(name, sizeof(name), info.device));
 			gpus.push_back(info);
       LOG_F(INFO, "[%i] %s; Compute capability %i.%i", (int)gpus.size()-1, name, info.majorComputeCapability, info.minorComputeCapability);
